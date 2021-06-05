@@ -1,0 +1,53 @@
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['127.0.0.1:9090']
+
+  - job_name: 'speedtest-exporter'
+    scrape_interval: 5m
+    scrape_timeout: 1m
+    static_configs:
+      - targets: ['speedtest-exporter:9798']
+
+  # - job_name: snmp
+  #   honor_timestamps: true
+  #   params:
+  #     module:
+  #     - ddwrt
+  #   scrape_interval: 15s
+  #   scrape_timeout: 10s
+  #   metrics_path: /snmp
+  #   scheme: http
+  #   follow_redirects: true
+  #   relabel_configs:
+  #   - source_labels: [__address__]
+  #     separator: ;
+  #     regex: (.*)
+  #     target_label: __param_target
+  #     replacement: $1
+  #     action: replace
+  #   - source_labels: [__param_target]
+  #     separator: ;
+  #     regex: (.*)
+  #     target_label: instance
+  #     replacement: $1
+  #     action: replace
+  #   - separator: ;
+  #     regex: (.*)
+  #     target_label: __address__
+  #     replacement: 127.0.0.1:9116 ## The Address of the SNMP Exporter
+  #     action: replace
+  #   static_configs:
+  #   - targets:
+  #     - 127.0.0.1:161 ##The actual SNMP Device

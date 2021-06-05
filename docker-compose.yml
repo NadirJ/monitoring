@@ -1,0 +1,27 @@
+version: "3.6"
+services:
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+        - ./grafana/datasources:/etc/grafana/provisioning/datasources
+        - ./grafana/dashboards-provisioning:/etc/grafana/provisioning/dashboards
+        - ./grafana/dashboards:/var/lib/grafana/dashboards
+    ports: 
+      - 3000:3000
+    environment:
+      GF_SERVER_ENABLE_GZIP: 'true'
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+
+  speedtest-exporter:
+    image: miguelndecarvalho/speedtest-exporter
+    container_name: speedtest-exporter
+    ports:
+      - 9798:9798
